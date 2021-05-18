@@ -12,6 +12,7 @@ import { loggedin } from './api';
 import ItineraryList from './Components/ItineraryList';
 import AllTrips from './Components/AllTrips';
 import MyTrips from './Components/MyTrips';
+import AddTrip from './Components/AddTrip';
 
 class App extends React.Component {
   state = {
@@ -42,6 +43,7 @@ class App extends React.Component {
         />
         <Switch>
           <Route exact path='/trips' component={AllTrips} />
+          <Route exact path='/trips/add' component={AddTrip} />
           <Route exact path="/trip/:id" component={ItineraryList} />
           <Route exact path='/mytrips' component= {MyTrips}/>
           <Route exact path="/signup" component={Signup} /> 

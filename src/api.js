@@ -12,11 +12,12 @@ export const getMyTrips = () => {
 export const getItinerary = (id) => {
   return axios.get(`${baseUrl}/trip/${id}`);
 };
+
 export const addItinerary = (id) => {
-  return axios.post(`${baseUrl}/trips/`);
+  return axios.post(`${baseUrl}/trips`, {withCredentials: true});
 };
 
-export const addDestination = (id) => {
+export const updateItinerary = (id) => {
   return axios.put(`${baseUrl}/trip/${id}`);
 };
 

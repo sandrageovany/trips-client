@@ -15,6 +15,7 @@ class MyTrips extends React.Component {
   }
   render(){
       return(
+        <>
           <ul>
               {this.state.trips.map((trip)=>{
                   return <li key={trip._id}>
@@ -26,7 +27,14 @@ class MyTrips extends React.Component {
                     
                   </li>
               })}
+
           </ul>
+          <NavLink exact to={`/trips/add`}>
+                      
+                      Add trip  
+                      </NavLink>
+                    
+          </>
       )
   }
 }
