@@ -17,11 +17,11 @@ function Navbar({loggedInUser, setCurrentUser}) {
           <button onClick={logoutUser}>logout</button>
         </NavLink>
       </li>
-      <li>
+      {/* <li>
         <NavLink activeStyle={{ color: "red" }} exact to="/trips">
           Projects
         </NavLink>
-      </li>
+      </li> */}
       <li>
         <NavLink activeStyle={{ color: "red" }} exact to="/mytrips">
           My trips

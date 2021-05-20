@@ -2,41 +2,41 @@ import React from 'react';
 import { addItinerary } from '../api';
 
 class AddTrip extends React.Component {
+  searchBox = null;
+  map = null;
+
   state = {
     title: '',
-    destinations: [
-      {
-        name: '',
-        lat: 38.7129146,
-        lng: -9.1286218,
-      },
-    ],
+    destinations: [],
   };
   async componentDidMount() {
     setTimeout(async () => {
+      const initialCenter = {
+        lat: 38.7129146,
+        lng: -9.1286218,
+      };
       this.map = new window.google.maps.Map(document.getElementById('map'), {
+        
         center: {
-          lat: Number(this.state.destinations[0].lat),
-          lng: Number(this.state.destinations[0].lng),
+          lat: initialCenter.lat,
+          lng: initialCenter.lng
         },
         zoom: 15,
       });
       const input = document.getElementById('pac-input');
       const google = window.google;
-      const searchBox = new google.maps.places.SearchBox(input);
+      this.searchBox = new google.maps.places.SearchBox(input);
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
       this.map.addListener('bounds_changed', () => {
-        searchBox.setBounds(this.map.getBounds());
+        this.searchBox.setBounds(this.map.getBounds());
       });
 
       // Listen for the event fired when the user selects a prediction and retrieve
       // more details for that place.
-      searchBox.addListener('places_changed', () => {
-        const places = searchBox.getPlaces();
+      this.searchBox.addListener('places_changed', () => {
+        const places = this.searchBox.getPlaces();
 
-        addItinerary(123);
-
-        if (places.length == 0) {
+        if (places.length === 0) {
           return;
         }
 
@@ -64,7 +64,7 @@ class AddTrip extends React.Component {
               position: place.geometry.location,
             })
           );
-
+          console.log('name', place.name);
           console.log('first destination', place.geometry.location.toString());
 
           if (place.geometry.viewport) {
@@ -73,19 +73,60 @@ class AddTrip extends React.Component {
           } else {
             bounds.extend(place.geometry.location);
           }
+          markers.map((marker) => {
+            marker.addListener('click', (event) => {
+              console.log(event);
+              var newDestination = {
+                name: place.name,
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+              };
+              var allDestinations = this.state.destinations;
+              allDestinations.push(newDestination);
+              this.setState({
+                destinations: allDestinations,
+              });
+            });
+          });
         });
+
         this.map.fitBounds(bounds);
       });
 
-      this.drawMarkers();
+      // this.drawMarkers();
+
+      this.map.addListener('click', (event) => {
+        console.log(event.latLng.lat());
+
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ placeId: event.placeId }, (results, status) => {
+          if (status === 'OK') {
+            if (results[0]) {
+              var newDestination = {
+                name: results[0].address_components[0].long_name,
+                lat: results[0].geometry.location.lat(),
+                lng: results[0].geometry.location.lng(),
+              };
+              var allDestinations = this.state.destinations;
+              allDestinations.push(newDestination);
+              this.setState({
+                destinations: allDestinations,
+              });
+
+              console.log(results[0]);
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+      });
     }, 100);
   }
 
-  handleFileChange = (event) => {
-    this.setState({
-      imageUrl: event.target.files[0],
-    });
-  };
+  componentWillUnmount() {}
+
   handleChange = (event) => {
     let { name, value } = event.target;
     this.setState({
@@ -96,13 +137,9 @@ class AddTrip extends React.Component {
     event.preventDefault();
     const { title, destinations } = this.state;
 
-    const newItinerary = {
-      title,
-      destinations,
-    };
-    await addItinerary(newItinerary);
+    await addItinerary(title, destinations);
 
-    this.props.history.push('/mytrips');
+    window.location.href = '/mytrips';
   };
   onAddItem = () => {
     this.setState((state) => {
@@ -114,27 +151,35 @@ class AddTrip extends React.Component {
       };
     });
   };
+  // handleAddDestination=()=>{
+  //
 
-  createMarker = (position) => {
-    // const myLatLng = { lat: Number(position.lat), lng: Number(position.lng)};
-    const google = window.google;
-    new google.maps.Marker({
-      position: position,
-      map: this.map,
-    });
-  };
+  // }
 
-  drawMarkers = () => {
-    this.state.destinations.forEach((destination) => {
-      this.createMarker(destination);
-    });
-  };
+  // createMarker = (position) => {
+  //   // const myLatLng = { lat: Number(position.lat), lng: Number(position.lng)};
+  //   const google = window.google;
+  //   new google.maps.Marker({
+  //     position: position,
+  //     map: this.map,
+  //   });
+  // };
+
+  // drawMarkers = () => {
+  //   this.state.destinations.forEach((destination) => {
+  //     this.createMarker(destination);
+  //   });
+  // };
   render() {
-    const { title, destinations } = this.state;
+    const { title } = this.state;
     return (
-      <>
-        <input id="pac-input" type="text" />
+      <div>
         <div style={{ width: 800, height: 500 }} id="map" />
+        <ul>
+          {this.state.destinations.map((destination) => (
+            <li key={destination._id}>{destination.name}</li>
+          ))}
+        </ul>
         <form onSubmit={this.handleFormSubmit}>
           <label>Title</label>
           <input
@@ -143,34 +188,11 @@ class AddTrip extends React.Component {
             type="text"
             value={title}
           />
-          <label>Destinations</label>
 
-          <ul>
-            {this.state.destinations.map((destination) => (
-              <li key={destination._id}>
-                {destination.name}
-                {destination.lat}
-                {destination.lng}
-              </li>
-            ))}
-          </ul>
-
-          <input
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />
-          <button
-            type="button"
-            onClick={this.onAddItem}
-            disabled={!this.state.value}
-          >
-            Add destination
-          </button>
-
+          <input id="pac-input" type="text" />
           <button type="submit">Create</button>
         </form>
-      </>
+      </div>
     );
   }
 }
