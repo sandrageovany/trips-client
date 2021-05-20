@@ -37,10 +37,13 @@ class App extends React.Component {
     const { loggedInUser } = this.state;
     return (
       <div className="App">
+        <div className="sidebar">
         <Navbar
           loggedInUser={loggedInUser}
           setCurrentUser={this.setCurrentUser}
         />
+        </div>
+      
         <Switch>
           <Route exact path='/trips' component={AllTrips} />
           <Route exact path='/trips/add' component={AddTrip} />

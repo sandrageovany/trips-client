@@ -9,26 +9,36 @@ function Navbar({loggedInUser, setCurrentUser}) {
     }
     
   return loggedInUser ? (
-      <>
-      <p>Welcome {loggedInUser.username}</p>
-    <ul>
-    <li>
+      <div className="container">
+      <div className='row'>
+        <div className='col-md-4'>
+        <p>Welcome {loggedInUser.username}</p>
+        </div>
+     
+     
+  
+   <div className='col-md-4'>
+   
         <NavLink activeStyle={{ color: "red" }} exact to="/">
           <button onClick={logoutUser}>logout</button>
         </NavLink>
-      </li>
+       
+    
+      </div>
       {/* <li>
         <NavLink activeStyle={{ color: "red" }} exact to="/trips">
           Projects
         </NavLink>
       </li> */}
-      <li>
-        <NavLink activeStyle={{ color: "red" }} exact to="/mytrips">
+      <div className="col-md-4">
+      <NavLink activeStyle={{ color: "red" }} exact to="/mytrips">
           My trips
         </NavLink>
-      </li>
-    </ul>
-    </>
+      </div>
+      </div>
+    
+  
+    </div>
   ) : (
     <ul>
    
