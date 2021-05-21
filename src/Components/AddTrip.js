@@ -138,8 +138,8 @@ class AddTrip extends React.Component {
     const { title, destinations } = this.state;
 
     await addItinerary(title, destinations);
-
-    window.location.href = '/mytrips';
+    this.props.history.push('/mytrips');
+    //window.location.href = '/mytrips';
   };
   onAddItem = () => {
     this.setState((state) => {
