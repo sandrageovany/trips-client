@@ -1,53 +1,96 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { logout } from "../api";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { logout } from '../api';
+import {
+  CDBSidebar,
+  CDBSidebarContent,
+  CDBSidebarFooter,
+  CDBSidebarHeader,
+  CDBSidebarMenu,
+  CDBSidebarMenuItem,
+} from 'cdbreact';
+function Navbar({ loggedInUser, setCurrentUser }) {
+  const logoutUser = async () => {
+    await logout();
+    setCurrentUser(null);
+  };
 
-function Navbar({loggedInUser, setCurrentUser}) {
-    const logoutUser= async ()=>{
-        await logout();
-        setCurrentUser(null);
-    }
-    
   return loggedInUser ? (
-      <>
-      <p>Welcome {loggedInUser.username}</p>
-    <ul>
-    <li>
-        <NavLink activeStyle={{ color: "red" }} exact to="/">
-          <button onClick={logoutUser}>logout</button>
-        </NavLink>
-      </li>
-      {/* <li>
-        <NavLink activeStyle={{ color: "red" }} exact to="/trips">
-          Projects
-        </NavLink>
-      </li> */}
-      <li>
-        <NavLink activeStyle={{ color: "red" }} exact to="/mytrips">
-          My trips
-        </NavLink>
-      </li>
-    </ul>
-    </>
+    <div
+      style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}
+    >
+      <CDBSidebar textColor="#fff" backgroundColor="#333">
+        <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
+          <a
+            href="/"
+            className="text-decoration-none"
+            style={{ color: 'inherit' }}
+          >
+            Welcome {loggedInUser.username}{' '}
+          </a>
+        </CDBSidebarHeader>
+
+        <CDBSidebarContent className="sidebar-content">
+          <CDBSidebarMenu>
+            <div>
+              <NavLink activeStyle={{ color: 'red' }} exact to="/" activeClassName="activeClicked">
+                <button onClick={logoutUser}>logout</button>
+              </NavLink>
+            </div>
+
+            <div>
+              <NavLink activeStyle={{ color: 'red' }} exact to="/mytrips"activeClassName="activeClicked">
+                My trips
+              </NavLink>
+            </div>
+            <div>
+              <NavLink activeStyle={{ color: 'red' }} exact to={`/trips/add`}activeClassName="activeClicked">
+                Add trip
+              </NavLink>
+            </div>
+          </CDBSidebarMenu>
+        </CDBSidebarContent>
+      </CDBSidebar>
+    </div>
   ) : (
-    <ul>
-   
-    <li>
-        <NavLink activeStyle={{ color: "red" }} exact to="/signup">
+    <div
+    style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}
+  >
+    <CDBSidebar textColor="#fff" backgroundColor="#333">
+      <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
+        <a
+          href="/"
+          className="text-decoration-none"
+          style={{ color: 'inherit' }}
+        >
+        Trips{' '}
+        </a>
+      </CDBSidebarHeader>
+
+      <CDBSidebarContent className="sidebar-content">
+        <CDBSidebarMenu>
+          
+
+    
+      <div>
+        <NavLink activeStyle={{ color: 'red' }} exact to="/signup">
           Signup
         </NavLink>
-      </li>
-      <li>
-        <NavLink activeStyle={{ color: "red" }} exact to="/login">
+      </div>
+      <div>
+        <NavLink activeStyle={{ color: 'red' }} exact to="/login">
           Login
         </NavLink>
-      </li>
-      <li>
-        <NavLink activeStyle={{ color: "red" }} exact to="/login-google">
+      </div>
+      <div>
+        <NavLink activeStyle={{ color: 'red' }} exact to="/login-google">
           Login with google
         </NavLink>
-      </li>
-  </ul>
-  )
+      </div>
+      </CDBSidebarMenu>
+        </CDBSidebarContent>
+      </CDBSidebar>
+      </div>
+  );
 }
 export default Navbar;

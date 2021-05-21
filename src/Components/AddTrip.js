@@ -103,7 +103,7 @@ class AddTrip extends React.Component {
           if (status === 'OK') {
             if (results[0]) {
               var newDestination = {
-                name: results[0].address_components[0].long_name,
+                name: results[0].address_components[0].short_name,
                 lat: results[0].geometry.location.lat(),
                 lng: results[0].geometry.location.lng(),
               };
@@ -125,7 +125,7 @@ class AddTrip extends React.Component {
     }, 100);
   }
 
-  componentWillUnmount() {}
+
 
   handleChange = (event) => {
     let { name, value } = event.target;
@@ -173,13 +173,16 @@ class AddTrip extends React.Component {
   render() {
     const { title } = this.state;
     return (
-      <div>
-        <div style={{ width: 800, height: 500 }} id="map" />
-        <ul>
+      <div style={{display:'flex',marginTop:'60px'}}>
+        <div style={{marginRight:'50px'}}>
+        <div style={{ width: 1100, height: 750 }} id="map" />
+        </div>
+        <div>
+      
           {this.state.destinations.map((destination) => (
-            <li key={destination._id}>{destination.name}</li>
+            <p key={destination._id}>{destination.name}</p>
           ))}
-        </ul>
+        
         <form onSubmit={this.handleFormSubmit}>
           <label>Title</label>
           <input
@@ -189,9 +192,10 @@ class AddTrip extends React.Component {
             value={title}
           />
 
-          <input id="pac-input" type="text" />
+          <input style={{height:"40px",width:'300px', top:'10px'}} id="pac-input" type="text" />
           <button type="submit">Create</button>
         </form>
+        </div>
       </div>
     );
   }

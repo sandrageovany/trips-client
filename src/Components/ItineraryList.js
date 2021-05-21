@@ -162,22 +162,22 @@ class ItineraryList extends React.Component {
   render() {
     return (
       <div>
-        <input id="pac-input" type="text" />
-        <div style={{ width: 800, height: 500 }} id="map" />
+          <div style={{display:'flex',marginTop:'60px'}}>
+        <div style={{marginRight:'50px'}}>
+        <input  style={{height:"40px",width:'300px', top:'10px'}} id="pac-input" type="text" />
+        <div style={{ width: 1100, height: 750 }} id="map" />
+        </div>
 
-        <ul>
+        <div>
+          <h1>{this.state.title}</h1>
+        
           {this.state.destinations &&
             this.state.destinations.map((destination) => {
-              return <li key={destination._id}> {destination.name} </li>;
+              return <p key={destination._id}> {destination.name} </p>;
             })}
-        </ul>
-        <div>
-          <ul>
-            <li>
-              <div>new destination</div>
-            </li>
-          </ul>
         </div>
+        </div>
+        
       </div>
     );
   }
