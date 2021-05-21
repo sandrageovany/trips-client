@@ -2,6 +2,14 @@ import './App.css';
 //import ListProjects from './Components/AllTrips';
 import { Switch, Route } from 'react-router-dom';
 
+import {
+  CDBSidebar,
+  CDBSidebarContent,
+  CDBSidebarFooter,
+  CDBSidebarHeader,
+  CDBSidebarMenu,
+  CDBSidebarMenuItem,
+} from 'cdbreact';
 
 import Navbar from './Components/Navbar';
 
@@ -26,6 +34,8 @@ class App extends React.Component {
         this.setCurrentUser(response.data);
       }
     }
+
+    
   }
 
   setCurrentUser = (user) => {
@@ -37,15 +47,16 @@ class App extends React.Component {
     const { loggedInUser } = this.state;
     return (
       <div className="App">
+        <div style={{display: 'flex'}}>
         <div className="sidebar">
         <Navbar
           loggedInUser={loggedInUser}
           setCurrentUser={this.setCurrentUser}
         />
         </div>
-      
+      <div className='' style={{marginLeft: '150px'}}>
         <Switch>
-          <Route exact path='/trips' component={AllTrips} />
+          <Route exact path={'/trips', '/'} component={AllTrips} />
           <Route exact path='/trips/add' component={AddTrip} />
           <Route exact path="/trip/:id" component={ItineraryList} />
           <Route exact path='/mytrips' component= {MyTrips}/>
@@ -58,6 +69,8 @@ class App extends React.Component {
             }}
           />
         </Switch>
+        </div>
+        </div>
       </div>
     );
   }

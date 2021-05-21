@@ -14,7 +14,6 @@ export const getItinerary = (id) => {
 };
 
 export const addItinerary = (title, destinations) => {
-  debugger;
   return axios.post(`${baseUrl}/trips`, {title, destinations}, {withCredentials: true});
 };
 
